@@ -2,17 +2,21 @@
 <?php
 session_start();
 ?>
-<html> 
+<html > 
     <head>
         <title></title>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="style/main.css">
-        <link rel="stylesheet" href="style/login.css">
+        <link rel="stylesheet" href="style/home.css">
     </head> 
     <body>
-        <?php
-        print_r($_SESSION);
-        ?>
+        
+        <a href="settingSite.php">Settings</a>
+        <a href="enterSite.php">Enter</a>
+        
+        
+        
+        
         
         
         

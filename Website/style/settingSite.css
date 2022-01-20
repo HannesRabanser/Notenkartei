@@ -1,0 +1,66 @@
+.settingsBlock{
+    border: 1px solid black;
+    width: 50%;
+}
+
+.settingsHeader{
+    float: left;
+}
+
+.buttonAdd{
+    float: right;
+}
+
+.tableOutput{
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tableOutput tr:nth-child(even){background-color: #f2f2f2;}
+
+.tableOutput th, .tableOutput td{
+    border: 1px solid #ddd;
+}
+
+.tableOutput th{
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 8px;
+}
+
+.tableOutput td{
+    padding: 6px;
+}
+
+.tableOutput button{
+    
+}
+
+.tableOutput td:nth-last-child(2), td:nth-last-child(1) {
+    width: 0px;
+}
+
+.formForm{
+
+}
+
+.formHead{
+    
+}
+
+.formLable{
+    
+}
+
+.formInput{
+    
+}
+
+.formSubmit{
+    
+}
+
+.formReset{
+    
+}
