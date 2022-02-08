@@ -17,6 +17,79 @@
 
     if(isset($_GET['add'])){
         $kategorie = $_POST['kategorie'];
+        $katalognummer = $_POST['katalognummer'];
+        $titel = $_POST['titel'];
+        $untertitel = $_POST['untertitel'];
+        $zugehoerigkeit = $_POST['zugehörigkeit'];
+        if(isset($_POST['z_i_kirchenjahr'])){
+            $z_i_kirchenjahr = $_POST['z_i_kirchenjahr'];
+        }else{
+            $z_i_kirchenjahr = ['nd'];
+        }
+        if(isset($_POST['thema'])){
+            $thema = $_POST['thema'];
+        }else{
+            $thema = 'nd';
+        }
+        $besetzung = $_POST['besetzung'];
+        $komponist = $_POST['komponist'];
+        $bearbeitung = $_POST['bearbeitung'];
+        $texter = $_POST['texter'];
+        $verlag = $_POST['verlag'];
+        $werknummer = $_POST['werknummer'];
+        $status = $_POST['status'];
+        
+        $sql = "SELECT MAX(`nb_id`) FROM `tb_notenblatt`";
+        $result = $conn->query($sql);
+        
+        if ($result->num_rows > 0) {
+            $idA = $result->fetch_assoc();
+            $id = $idA["MAX(`nb_id`)"];
+            $id++;
+        }
+
+        $sql = "INSERT INTO `tb_notenblatt`(`nb_id`,`nb_katalognummer`, `nb_titel`, `nb_untertitel`, `nb_katigorie`, `nb_besetzung`, `nb_komponist`, `nb_bearbeitung`, `nb_texter`, `nb_werknummer`, `nb_status`, `nb_zugehoerigkeit`) VALUES ($id,'$katalognummer','$titel','$untertitel',$kategorie,$besetzung,'$komponist','$bearbeitung','$texter','$werknummer','$status','$zugehoerigkeit')";
+
+            if ($conn->query($sql) === TRUE) {
+                
+                if($verlag != "nd"){
+                    $sql = "UPDATE `tb_notenblatt` SET `nb_verlag`= $verlag WHERE `nb_id`=$id";
+                    if ($conn->query($sql) === TRUE) {
+                        
+                    }else {
+                        echo "Error: " . $sql . "<br>" . $conn->error;
+                    }
+                }
+                
+                if($thema != 'nd'){
+                    foreach($thema  as $value){
+                        $sql = "INSERT INTO `tb_nb_th`(`nb_th_thema`, `nb_th_notenblatt`) VALUES ($value,$id)";
+                        if ($conn->query($sql) === TRUE) {
+                        
+                        }else {
+                            echo "Error: " . $sql . "<br>" . $conn->error;
+                        }
+                    }
+                }
+                
+                if($z_i_kirchenjahr != 'nd'){
+                    foreach($z_i_kirchenjahr  as $value){
+                        $sql = "INSERT INTO `tb_nb_zik`(`nb_zik_z_i_kirchenjahr`, `nb_zik_notenblatt`) VALUES ($value,$id)";
+                        if ($conn->query($sql) === TRUE) {
+                        
+                        }else {
+                            echo "Error: " . $sql . "<br>" . $conn->error;
+                        }
+                    }
+                }
+                
+                //echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+        
+        
+        /*INSERT INTO `tb_notenblatt`(`nb_id`,`nb_katalognummer`, `nb_titel`, `nb_untertitel`, `nb_katigorie`, `nb_besetzung`, `nb_komponist`, `nb_bearbeitung`, `nb_texter`, `nb_verlag`, `nb_werknummer`, `nb_status`, `nb_zugehoerigkeit`) VALUES ($id,'$katalognummer','$titel','$untertitel',$kategorie,$besetzung,'$komponist','$bearbeitung','$texter',$verlag,'$werknummer','$status','$zugehoerigkeit')*/
         
         
         
@@ -24,7 +97,7 @@
         
         
         
-        echo $kategorie;
+        //print_r($_POST);
     }
     
 
@@ -41,6 +114,9 @@
         <div class="container">
             <?php
             print_r($_SESSION);
+            
+             
+            
             ?>
         
             <form class="formForm" action="?add=1" method="post">
@@ -63,10 +139,10 @@
                 </select>
 
                 <div class="formLable">Nummer</div>
-                <input class="formInput" type="number" name="katalognummer">
+                <input class="formInput" type="number" name="katalognummer" max="999" min="1" required>
 
                 <div class="formLable">Titel</div>
-                <input class="formInput" type="text" name="titel">
+                <input class="formInput" type="text" name="titel" required>
 
                 <div class="formLable">Untertitel</div>
                 <input class="formInput" type="text" name="untertitel">
@@ -75,7 +151,7 @@
                 <input class="formInput" type="text" name="zugehörigkeit">
 
                 <div class="formLable">Zeit im Kirchenjahr</div>
-                <select class="formSelect" name="z_i_kirchenjahr" multiple>
+                <select class="formSelect" name="z_i_kirchenjahr[]" multiple>
                 <?php
                     $sql = "SELECT * FROM tb_z_i_kirchenjahr";
                     $result = $conn->query($sql);
@@ -92,7 +168,7 @@
                 </select>
 
                 <div class="formLable">Thema</div>
-                <select class="formSelect" name="thema" multiple>
+                <select class="formSelect" name="thema[]" multiple>
                 <?php
                     $sql = "SELECT * FROM tb_thema";
                     $result = $conn->query($sql);
@@ -156,11 +232,11 @@
                 <input class="formInput" type="text" name="werknummer">
 
                 <div class="formLable">Status</div>
-                <select class="formSelect" name="verlag">
-                    <option value='nd'>Aktiv</option>
-                    <option value='nd'>Archiviert</option>
-                    <option value='nd'>Verliehen</option>
-                    <option value='nd'>Entfernt</option>
+                <select class="formSelect" name="status">
+                    <option value='akti'>Aktiv</option>
+                    <option value='arch'>Archiviert</option>
+                    <option value='verl'>Verliehen</option>
+                    <option value='entf'>Entfernt</option>
                 </select>
                 <br/>
                 <button class="formSubmit" type="submit">Hinzufügen</button>
