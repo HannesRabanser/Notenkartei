@@ -1,16 +1,62 @@
+.row:after{
+    content: "";
+    display: table;
+    clear: both;
+}
+
 .settingsBlock{
     border: 1px solid black;
-    width: 50%;
+    border-collapse: collapse;
+    width: calc(33.33% - 3px);
+    float: left;
 }
 
 .settingsHeader{
     float: left;
 }
 
-.buttonAdd{
-    float: right;
+@media (max-width: 800px){
+    .settingsBlock{
+        width: 100%;
+    }
 }
 
+.buttonAdd{
+    float: right;
+    width: 25px;
+    padding: 5px;
+}
+
+.formForm{
+    width: 100%;
+}
+
+.formHead{
+    
+}
+
+.formLable{
+    float: left;
+    width: 50px;
+    padding: 5px;
+}
+
+.formInput{
+    float: left;
+    width: calc(100% - 75px);
+    padding: 2.5px;
+    margin: 2.5px;
+}
+
+.formSubmit{
+    
+}
+
+.formReset{
+    
+}
+
+/*Tabelle*/
 .tableOutput{
     border: 1px solid #ddd;
     border-collapse: collapse;
@@ -33,34 +79,11 @@
     padding: 6px;
 }
 
-.tableOutput button{
-    
+.tableOutput img{
+    height: 25px;
 }
 
 .tableOutput td:nth-last-child(2), td:nth-last-child(1) {
     width: 0px;
-}
-
-.formForm{
-
-}
-
-.formHead{
-    
-}
-
-.formLable{
-    
-}
-
-.formInput{
-    
-}
-
-.formSubmit{
-    
-}
-
-.formReset{
-    
+    padding: 5px;
 }

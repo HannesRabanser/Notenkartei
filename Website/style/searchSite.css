@@ -1,0 +1,106 @@
+/*Tabelle*/
+.tableOutput{
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
+}
+
+.tableOutput tr:nth-child(4n-2), tr:nth-child(4n-1){
+    background-color: #f2f2f2;
+}
+
+.tableOutput th, .tableOutput td{
+    border: 1px solid #ddd;
+}
+
+.tableOutput th{
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 8px;
+}
+
+.tableOutput td{
+    padding: 6px;
+}
+
+.tableOutput img{
+    height: 25px;
+}
+
+.tableOutput td:nth-last-child(2), td:nth-last-child(1) {
+    width: 0px;
+    padding: 5px;
+}
+
+.tableOutput div{
+    
+}
+
+.icon{
+    height: 25px; 
+    float: right;
+    padding: 5px;
+}
+
+.searchBar{
+    float: left;
+    vertical-align: middle;
+}
+
+.editNewBG{
+    position: fixed;
+    background: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+    
+}
+
+.editNewForm{  
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.formForm{
+    width: 400px;
+}
+
+.formHead{
+    
+}
+
+.formLable{
+    width: 100px;
+    float: left;
+    margin: 5px 0px;
+}
+
+.formInput{
+    width: calc(100% - 120px);
+    float: left;
+    margin: 5px 0px;
+}
+
+.formSelect{
+    width: calc(100% - 112px);
+    float: left;    
+    margin: 5px 0px;
+}
+
+.formSubmit{
+    
+}
+
+.formReset{
+    
+}
