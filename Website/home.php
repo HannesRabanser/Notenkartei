@@ -106,9 +106,12 @@
             $nb_verlag = $_POST['verlag'];
             $nb_werknummer = $_POST['werknummer'];
             $nb_status = $_POST['status'];
-
             
-            $sql = "UPDATE `tb_notenblatt` SET `nb_katalognummer`='$nb_katalognummer', `nb_titel`='$nb_titel', `nb_untertitel`='$nb_untertitel', `nb_zugehoerigkeit`='$nb_zugehoerigkeit', `nb_katigorie`=$nb_kategorie, `nb_besetzung`=$nb_besetzung, `nb_komponist`='$nb_komponist', `nb_bearbeitung`='$nb_bearbeitung', `nb_texter`='$nb_texter', `nb_verlag`=$nb_verlag, `nb_werknummer`='$nb_werknummer', `nb_status`='$nb_status' WHERE  nb_id = $nb_id";
+            if($nb_verlag == "nd"){
+                $nb_verlag = "null";
+            }
+            
+            $sql = "UPDATE `tb_notenblatt` SET `nb_katalognummer`='$nb_katalognummer', `nb_titel`='$nb_titel', `nb_untertitel`='$nb_untertitel', `nb_zugehoerigkeit`='$nb_zugehoerigkeit', `nb_katigorie`=$nb_kategorie, `nb_besetzung`=$nb_besetzung, `nb_komponist`='$nb_komponist', `nb_bearbeitung`='$nb_bearbeitung', `nb_texter`='$nb_texter', `nb_verlag`= $nb_verlag, `nb_werknummer`='$nb_werknummer', `nb_status`='$nb_status' WHERE  nb_id = $nb_id";
 
             if ($conn->query($sql) === TRUE) {
                 //echo "Record updated successfully";
@@ -307,6 +310,9 @@
                             }
                         }
                     }
+                    
+                    $sql .= " ORDER BY nb_katigorie, nb_katalognummer";
+                    
                     
                     $result = $conn->query($sql);
 

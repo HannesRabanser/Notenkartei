@@ -13,6 +13,8 @@
 
 .settingsHeader{
     float: left;
+    margin: 5px;
+    font-size: 20px;
 }
 
 @media (max-width: 800px){
@@ -29,6 +31,8 @@
 
 .formForm{
     width: 100%;
+    clear: both;
+    margin: 5px;
 }
 
 .formHead{

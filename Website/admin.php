@@ -131,70 +131,80 @@ session_start();
             <h1>NoA</h1>
             <h2>Web-Basierte Notenarchivierung</h2>
             
-            <img src='img/add.svg' class="buttonAdd" onclick="document.getElementById('addUs').style.display = 'block';
-                                                       document.getElementById('editUs').style.display = 'none';
-                                                       document.getElementById('delUs').style.display = 'none';
-                                                       "><br/>
+            <div class="settingsBlock"></div>
             
-            <form action="?add=1" id="addUs" style="display: none" method="post">
-                Username:<br>
-                <input type="text" maxlength="250" name="username"><br>
-                <input type="submit" value="Erstellen">
-                <button class="formReset" type="reset" onclick="document.getElementById('addUs').style.display = 'none';">Abbrechen</button>
-            </form>
-            
-            <form class="formForm" id="editUs" style="display: none" action='?edit=us' method='post'>
-                        <div class="formHead">Bearbeiten</div>
-                        <input id="editUsID" type='hidden' name='id'>
-                        <div style="clear: both">
-                            <div class="formLable">Name</div>
-                            <input id="editUsName" class="formInput" type="text" name='name' placeholder="Name">
-                        </div>
-                        <div style="clear: both">
-                            <div class="formLable">Passwort zurücksetzen</div>
-                            <input id="editUSPassReset" class="formInput" type="checkbox" name="reset" value="Reset"><br/>
-                        </div>
-                        <button class="formSubmit" type='submit'>Bearbeiten</button>
-                        <button class="formReset" type="reset" onclick="document.getElementById('editUs').style.display = 'none';">Abbrechen</button>
-            </form>
-            
-            <form class="formForm" id="delUs" style="display: none" action='?del=us' method='post'>
-                        <input id="delUsID" type='hidden' name='id'>
-                        <div id="delUsName" class="formHead"></div>
-                        <button class="formSubmit" type='submit'>Löschen</button>
-                        <button class="formReset" type="reset" onclick="document.getElementById('delUs').style.display = 'none';">Abbrechen</button>
-                    </form>
-            
-            
-            <table class="tableOutput">
-            <?php
-                $sql = "SELECT * FROM tb_user";
-                $result = $conn->query($sql);
+            <div class="settingsBlock">
+                 <div class="settingsHeader">Benuzer</div>
+                
+                <img src='img/add.svg' class="buttonAdd" onclick="document.getElementById('addUs').style.display = 'block';
+                                                           document.getElementById('editUs').style.display = 'none';
+                                                           document.getElementById('delUs').style.display = 'none';
+                                                           "><br/>
 
-                if ($result->num_rows > 0) {
-                    //Jede Reie der Datenbank anzeigen
-                    while($row = $result->fetch_assoc()) {
-                        echo "<tr>
-                        <td>" . $row["us_username"]. "</td>
-                        <td onclick=\"document.getElementById('editUs').style.display = 'block';
-                             document.getElementById('editUsID').setAttribute('value','".$row["us_id"]."');
-                             document.getElementById('editUsName').setAttribute('value','".$row["us_username"]."'); 
-                             document.getElementById('addUs').style.display = 'none';
-                             document.getElementById('delUs').style.display = 'none';
-                             \"><img src='img/edit.svg'></td>
-                        <td onclick=\"document.getElementById('delUs').style.display = 'block';
-                             document.getElementById('delUsID').setAttribute('value','".$row["us_id"]."');
-                             document.getElementById('delUsName').innerHTML = 'Wollen Sie ".$row["us_username"]." wirklich löschen?';
-                             document.getElementById('addUs').style.display = 'none';
-                             document.getElementById('editUs').style.display = 'none';
-                             \"><img src='img/delete.svg'></td>
-                        </tr>";
+                <form action="?add=1" id="addUs" style="display: none" method="post">
+                    Username:<br>
+                    <input type="text" maxlength="250" name="username"><br>
+                    <input type="submit" value="Erstellen">
+                    <button class="formReset" type="reset" onclick="document.getElementById('addUs').style.display = 'none';">Abbrechen</button>
+                </form>
+
+                <form class="formForm" id="editUs" style="display: none" action='?edit=us' method='post'>
+                            <div class="formHead">Bearbeiten</div>
+                            <input id="editUsID" type='hidden' name='id'>
+                            <div style="clear: both">
+                                <div class="formLable">Name</div>
+                                <input id="editUsName" class="formInput" type="text" name='name' placeholder="Name">
+                            </div>
+                            <div style="clear: both">
+                                <div class="formLable">Passwort zurücksetzen</div>
+                                <input id="editUSPassReset" class="formInput" type="checkbox" name="reset" value="Reset"><br/>
+                            </div>
+                            <button class="formSubmit" type='submit'>Bearbeiten</button>
+                            <button class="formReset" type="reset" onclick="document.getElementById('editUs').style.display = 'none';">Abbrechen</button>
+                </form>
+
+                <form class="formForm" id="delUs" style="display: none" action='?del=us' method='post'>
+                            <input id="delUsID" type='hidden' name='id'>
+                            <div id="delUsName" class="formHead"></div>
+                            <button class="formSubmit" type='submit'>Löschen</button>
+                            <button class="formReset" type="reset" onclick="document.getElementById('delUs').style.display = 'none';">Abbrechen</button>
+                        </form>
+
+
+                <table class="tableOutput">
+                <?php
+                    $sql = "SELECT * FROM tb_user";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        //Jede Reie der Datenbank anzeigen
+                        while($row = $result->fetch_assoc()) {
+                            echo "<tr>
+                            <td>" . $row["us_username"]. "</td>
+                            <td onclick=\"document.getElementById('editUs').style.display = 'block';
+                                 document.getElementById('editUsID').setAttribute('value','".$row["us_id"]."');
+                                 document.getElementById('editUsName').setAttribute('value','".$row["us_username"]."'); 
+                                 document.getElementById('addUs').style.display = 'none';
+                                 document.getElementById('delUs').style.display = 'none';
+                                 \"><img src='img/edit.svg'></td>
+                            <td onclick=\"document.getElementById('delUs').style.display = 'block';
+                                 document.getElementById('delUsID').setAttribute('value','".$row["us_id"]."');
+                                 document.getElementById('delUsName').innerHTML = 'Wollen Sie ".$row["us_username"]." wirklich löschen?';
+                                 document.getElementById('addUs').style.display = 'none';
+                                 document.getElementById('editUs').style.display = 'none';
+                                 \"><img src='img/delete.svg'></td>
+                            </tr>";
+                        }
+                    } else {
+                        echo "Keine Einträge";
                     }
-                } else {
-                    echo "Keine Einträge";
-                }
-            ?>
-            </table>
+                ?>
+                </table>
+            </div>
+            
+            <div class="settingsBlock"></div>
+            
+            <div style="clear: both"></div>
         </div>
     </body>
 </html>

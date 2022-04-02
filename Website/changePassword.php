@@ -73,7 +73,7 @@
                 <div class="loginLable">Passwort Wiederholen:</div>
                 <input class="loginInput" type="password" size="40"  maxlength="250" name="newPasswort2"><br/>
 
-                <input class="loginButton" type="submit" value="Login">
+                <input class="loginButton" type="submit" value="Kennwort ändern">
                 
             </form> 
         </div>

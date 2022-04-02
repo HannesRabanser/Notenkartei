@@ -1,7 +1,7 @@
 CREATE DATABASE noa_notenarchiv;
-GO;
+
 USE noa_notenarchiv;
-GO;
+
 
 /* Erstellen der Tabellen */
 CREATE TABLE tb_thema (
@@ -30,17 +30,12 @@ CREATE TABLE tb_verlag (
 	ve_name varchar(100)
 );
 
-CREATE TABLE tb_auffuehrung (
-    af_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	af_name varchar(100),
-    af_datum date
-);
-
 CREATE TABLE tb_notenblatt (
     nb_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nb_katalognummer varchar(5),
 	nb_titel varchar(100),
     nb_untertitel varchar(100),
-    nb_zugehörigkeit varchar(100),
+    nb_zugehoerigkeit varchar(100),
     nb_katigorie int,
     nb_besetzung int,
     nb_komponist varchar(100),
@@ -70,14 +65,7 @@ CREATE TABLE tb_nb_th (
     nb_th_notenblatt int
 );
 
-CREATE TABLE tb_nb_af (
-    nb_af_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	nb_af_auffuehrung int,
-    nb_af_notenblatt int
-);
-
-GO;
-
+/* Erstellen der Foreign Keys */
 ALTER TABLE tb_notenblatt
 ADD FOREIGN KEY (nb_katigorie) REFERENCES tb_katigorie(ka_id),
 ADD FOREIGN KEY (nb_besetzung) REFERENCES tb_besetzung(be_id),
@@ -91,8 +79,5 @@ ALTER TABLE tb_nb_th
 ADD FOREIGN KEY (nb_th_notenblatt) REFERENCES tb_notenblatt(nb_id),
 ADD FOREIGN KEY (nb_th_thema) REFERENCES tb_thema(th_id);
 
-ALTER TABLE tb_nb_af
-ADD FOREIGN KEY (nb_af_notenblatt) REFERENCES tb_notenblatt(nb_id),
-ADD FOREIGN KEY (nb_af_auffuehrung) REFERENCES tb_auffuehrung(af_id);
-
-GO;
+/* Erstellen des Admin Account */
+INSERT INTO `tb_user` (`us_username`, `us_passwort`, `us_berechtigung`) VALUES ('Admin', '$2y$10$hx6nSeiQ3leXadf3X1CfHeHvvPtxgK2lg8Z5f6o.coCPWmKhgDiDO', '127')

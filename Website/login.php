@@ -45,6 +45,7 @@
         <title>Login</title>
         <link rel="icon" href="img/icon.svg">
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style/main.css">
         <link rel="stylesheet" href="style/login.css">
     </head> 

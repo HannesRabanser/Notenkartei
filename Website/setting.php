@@ -333,9 +333,9 @@ session_start();
                     
                     <!--Knopf Neu-->
                     <img src='img/add.svg' class="buttonAdd" onclick="document.getElementById('addKa').style.display = 'block';
-                                                       document.getElementById('editKa').style.display = 'none';
-                                                       document.getElementById('delKa').style.display = 'none';
-                                                       "><br/><!--zeigt Add an und verstekt Edit oder Del-->
+                                                                      document.getElementById('editKa').style.display = 'none';
+                                                                      document.getElementById('delKa').style.display = 'none';
+                                                                      "><br/><!--zeigt Add an und verstekt Edit oder Del-->
 
                     <form class="formForm" id="addKa" style="display: none" action="?add=ka" method="post">
                         <div class="formHead">Hinzufügen</div>
@@ -707,7 +707,7 @@ session_start();
 
                 </div>
             </div>
-            test
+            <div style="clear: both"></div>
         </div>
     </body>
 </html>
