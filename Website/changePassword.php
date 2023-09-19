@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <?php 
     session_start();
     // Weiterleitung zu Home wenn bereits angemelldet
@@ -13,18 +13,10 @@
         $us_name = $_SESSION['username'];
         
         //Datenbankverbindung aufbauen
-        $db_servername = "localhost";
-        $db_username = "root";
-        $db_password = "";
-        $db_dbname = "noa_notenarchiv";
-        
-        $conn = new mysqli($db_servername, $db_username, $db_password, $db_dbname);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+        include 'function/databaseCon.php';
 
         //Nutzer aus datebank abrufen der mit dem eingegebenen Usernamen überrinstimmt
-        $sql = "SELECT * FROM `tb_user` WHERE `us_username` = '$us_name'";
+        $sql = "SELECT * FROM `noa_user` WHERE `us_username` = '$us_name'";
         $result = $conn->query($sql);
         $user = $result->fetch_assoc();
         
@@ -32,7 +24,7 @@
         if ($result->num_rows == 1 && password_verify($us_oldPasswort, $user["us_passwort"]) && $us_newPasswort1 == $us_newPasswort2) {
             //Session-Variablen setzen und weiterleitn zu Home
             $passwort_hash = password_hash($us_newPasswort1, PASSWORD_DEFAULT);
-            $sql = "UPDATE `tb_user` SET `us_passwort`='$passwort_hash' WHERE `us_id` = " . $_SESSION['userid'] ;
+            $sql = "UPDATE `noa_user` SET `us_passwort`='$passwort_hash' WHERE `us_id` = " . $_SESSION['userid'] ;
                 if ($conn->query($sql) === TRUE) {
                     header('Location: home.php');
                 } else {
@@ -45,6 +37,7 @@
         $conn->close();
     }
 ?>
+<!DOCTYPE html> 
 <html> 
     <head>
         <title>Kennwort ändern</title>

@@ -1,6 +1,5 @@
-<!DOCTYPE html> 
 <?php 
-session_start();
+    session_start();
     //Login überprüfen
     if(!isset($_SESSION["userid"])){
         header('Location: index.php');
@@ -9,15 +8,7 @@ session_start();
         header('Location: index.php');
     } 
     //Datenbankverbindung aufbauen
-    $db_servername = "localhost";
-    $db_username = "root";
-    $db_password = "";
-    $db_dbname = "noa_notenarchiv";
-
-    $conn = new mysqli($db_servername, $db_username, $db_password, $db_dbname);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    include 'function/databaseCon.php';
  
     if(isset($_GET['add'])) {
         
@@ -25,11 +16,11 @@ session_start();
             $nameuser = $_POST['username'];
 
             //Nutzer aus datebank abrufen der mit dem eingegebenen Usernamen überrinstimmt
-            $sql = "SELECT * FROM `tb_user` WHERE us_username = '$nameuser';";
+            $sql = "SELECT * FROM `noa_user` WHERE us_username = '$nameuser';";
             $result = $conn->query($sql);
             if ($result->num_rows < 1 ) {
                 $passwort_hash = password_hash("Kennwort0!", PASSWORD_DEFAULT);
-                $sql = "INSERT INTO `tb_user`(`us_username`, `us_passwort`, `us_berechtigung`) VALUES ('$nameuser','$passwort_hash',126)";
+                $sql = "INSERT INTO `noa_user`(`us_username`, `us_passwort`, `us_berechtigung`) VALUES ('$nameuser','$passwort_hash',126)";
                 if ($conn->query($sql) === TRUE) {
                     //echo "Nuzer Hinzugefügt";
                 } else {
@@ -56,7 +47,7 @@ session_start();
             if($us_name == ""){
                 //echo "leer";
             } else{
-                $sql = "UPDATE `tb_user` SET `us_username`='$us_name'";
+                $sql = "UPDATE `noa_user` SET `us_username`='$us_name'";
 
                 if($reset == "Reset"){
                     $passwort_hash = password_hash("Kennwort0!", PASSWORD_DEFAULT);
@@ -83,7 +74,7 @@ session_start();
             if($us_id  == ""){
                 //echo "leer";
             } else{
-                $sql = "DELETE FROM `tb_user` WHERE `us_id` = $us_id";
+                $sql = "DELETE FROM `noa_user` WHERE `us_id` = $us_id";
 
                 if ($conn->query($sql) === TRUE) {
                     //echo "Record deleted successfully";
@@ -95,6 +86,7 @@ session_start();
     }
 
 ?>
+<!DOCTYPE html> 
 <html> 
     <head>
         <title>Settings</title>
@@ -173,7 +165,7 @@ session_start();
 
                 <table class="tableOutput">
                 <?php
-                    $sql = "SELECT * FROM tb_user";
+                    $sql = "SELECT * FROM noa_user";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {

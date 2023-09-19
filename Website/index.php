@@ -1,4 +1,3 @@
-<!DOCTYPE html> 
 <?php 
     session_start();
     //Logout
@@ -13,6 +12,7 @@
         header('Location: home.php');
     }
 ?>
+<!DOCTYPE html> 
 <html>
     <head>
         <!-- Weiterleitung zu Login -->

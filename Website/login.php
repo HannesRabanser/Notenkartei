@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php 
     session_start();
     // Weiterleitung zu Home wenn bereits angemelldet
@@ -11,18 +10,10 @@
         $us_passwort = $_POST['passwort'];
         
         //Datenbankverbindung aufbauen
-        $db_servername = "localhost";
-        $db_username = "root";
-        $db_password = "";
-        $db_dbname = "noa_notenarchiv";
-        
-        $conn = new mysqli($db_servername, $db_username, $db_password, $db_dbname);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+        include 'function/databaseCon.php';
 
         //Nutzer aus datebank abrufen der mit dem eingegebenen Usernamen überrinstimmt
-        $sql = "SELECT * FROM `tb_user` WHERE us_username = '$us_user';";
+        $sql = "SELECT * FROM `noa_user` WHERE us_username = '$us_user';";
         $result = $conn->query($sql);
         $user = $result->fetch_assoc();
         
@@ -40,6 +31,7 @@
         $conn->close();
     }
 ?>
+<!DOCTYPE html> 
 <html> 
     <head>
         <title>Login</title>

@@ -1,4 +1,3 @@
-<!DOCTYPE html> 
 <?php
     session_start();
 
@@ -8,120 +7,10 @@
     }
 
     //Datenbankverbindung aufbauen
-    $db_servername = "localhost";
-    $db_username = "root";
-    $db_password = "";
-    $db_dbname = "noa_notenarchiv";
+    include 'function/databaseCon.php';
 
-    $conn = new mysqli($db_servername, $db_username, $db_password, $db_dbname);
-    if($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-   if(isset($_GET['add'])){
-        $kategorie = $_POST['kategorie'];
-        $katalognummer = $_POST['katalognummer'];
-        $titel = $_POST['titel'];
-        $untertitel = $_POST['untertitel'];
-        $zugehoerigkeit = $_POST['zugehörigkeit'];
-        if(isset($_POST['z_i_kirchenjahr'])){
-            $z_i_kirchenjahr = $_POST['z_i_kirchenjahr'];
-        }else{
-            $z_i_kirchenjahr = 'nd';
-        }
-        if(isset($_POST['thema'])){
-            $thema = $_POST['thema'];
-        }else{
-            $thema = 'nd';
-        }
-        $besetzung = $_POST['besetzung'];
-        $komponist = $_POST['komponist'];
-        $bearbeitung = $_POST['bearbeitung'];
-        $texter = $_POST['texter'];
-        $verlag = $_POST['verlag'];
-        $werknummer = $_POST['werknummer'];
-        $status = $_POST['status'];
-        
-        $sql = "SELECT MAX(`nb_id`) FROM `tb_notenblatt`";
-        $result = $conn->query($sql);
-        
-        if ($result->num_rows > 0) {
-            $idA = $result->fetch_assoc();
-            $id = $idA["MAX(`nb_id`)"];
-            $id++;
-        }
-
-        $sql = "INSERT INTO `tb_notenblatt`(`nb_id`,`nb_katalognummer`, `nb_titel`, `nb_untertitel`, `nb_katigorie`, `nb_besetzung`, `nb_komponist`, `nb_bearbeitung`, `nb_texter`, `nb_werknummer`, `nb_status`, `nb_zugehoerigkeit`) VALUES ($id,'$katalognummer','$titel','$untertitel',$kategorie,$besetzung,'$komponist','$bearbeitung','$texter','$werknummer','$status','$zugehoerigkeit')";
-
-        if ($conn->query($sql) === TRUE) {
-
-            if($verlag != "nd"){
-                $sql = "UPDATE `tb_notenblatt` SET `nb_verlag`= $verlag WHERE `nb_id`=$id";
-                if ($conn->query($sql) === TRUE) {
-
-                }else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;
-                }
-            }
-
-            if($thema != 'nd'){
-                foreach($thema  as $value){
-                    $sql = "INSERT INTO `tb_nb_th`(`nb_th_thema`, `nb_th_notenblatt`) VALUES ($value,$id)";
-                    if ($conn->query($sql) === TRUE) {
-
-                    }else {
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }
-            }
-
-            if($z_i_kirchenjahr != 'nd'){
-                foreach($z_i_kirchenjahr  as $value){
-                    $sql = "INSERT INTO `tb_nb_zik`(`nb_zik_z_i_kirchenjahr`, `nb_zik_notenblatt`) VALUES ($value,$id)";
-                    if ($conn->query($sql) === TRUE) {
-
-                    }else {
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }
-            }
-
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-    }
-
-    if(isset($_GET['edit'])) {
-        if($_GET['edit'] == '1'){
-            $nb_id = $_POST['ID'];
-            $nb_kategorie = $_POST['kategorie'];
-            $nb_katalognummer = $_POST['katalognummer'];
-            $nb_titel = $_POST['titel'];
-            $nb_untertitel = $_POST['untertitel'];
-            $nb_zugehoerigkeit = $_POST['zugehoerigkeit'];
-            $nb_besetzung = $_POST['besetzung'];
-            $nb_komponist = $_POST['komponist'];
-            $nb_bearbeitung = $_POST['bearbeitung'];
-            $nb_texter = $_POST['texter'];
-            $nb_verlag = $_POST['verlag'];
-            $nb_werknummer = $_POST['werknummer'];
-            $nb_status = $_POST['status'];
-            
-            if($nb_verlag == "nd"){
-                $nb_verlag = "null";
-            }
-            
-            $sql = "UPDATE `tb_notenblatt` SET `nb_katalognummer`='$nb_katalognummer', `nb_titel`='$nb_titel', `nb_untertitel`='$nb_untertitel', `nb_zugehoerigkeit`='$nb_zugehoerigkeit', `nb_katigorie`=$nb_kategorie, `nb_besetzung`=$nb_besetzung, `nb_komponist`='$nb_komponist', `nb_bearbeitung`='$nb_bearbeitung', `nb_texter`='$nb_texter', `nb_verlag`= $nb_verlag, `nb_werknummer`='$nb_werknummer', `nb_status`='$nb_status' WHERE  nb_id = $nb_id";
-
-            if ($conn->query($sql) === TRUE) {
-                //echo "Record updated successfully";
-            } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
-            }
-            
-        }
-    }
  ?>
+ <!DOCTYPE html> 
 <html> 
     <head>
         <title>Search</title>
@@ -167,7 +56,7 @@
                         <select class="" name="kategorie">
                             <option value='nd' >Kategorie</option>
                         <?php
-                            $sql = "SELECT * FROM tb_katigorie ORDER BY `ka_name`";
+                            $sql = "SELECT * FROM noa_katigorie ORDER BY `ka_name`";
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
                                 //Jede Reie der Datenbank anzeigen
@@ -188,7 +77,7 @@
                         <select class="" name="z_i_kirchenjahr">
                             <option value='nd'>Zeit im Kirchenjahr</option>
                         <?php
-                            $sql = "SELECT * FROM tb_z_i_kirchenjahr";
+                            $sql = "SELECT * FROM noa_z_i_kirchenjahr";
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
                                 //Jede Reie der Datenbank anzeigen
@@ -209,7 +98,7 @@
                         <select class="" name="thema">
                             <option value='nd'>Thema</option>
                         <?php
-                            $sql = "SELECT * FROM tb_thema";
+                            $sql = "SELECT * FROM noa_thema";
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
                                 //Jede Reie der Datenbank anzeigen
@@ -230,7 +119,7 @@
                         <select class="" name="besetzung">
                             <option value='nd'>Besetzung</option>
                         <?php
-                            $sql = "SELECT * FROM tb_besetzung";
+                            $sql = "SELECT * FROM noa_besetzung";
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
                                 //Jede Reie der Datenbank anzeigen
@@ -274,12 +163,12 @@
 
                     <?php 
                     $sql = "SELECT `nb_id`, `nb_katalognummer`, `nb_titel`, `nb_untertitel`, `nb_katigorie`,`nb_besetzung`, `nb_komponist`, `nb_bearbeitung`, `nb_texter`, `nb_werknummer`, `nb_status`, `nb_zugehoerigkeit`, ka_name, ka_prefix, ve_name, be_name, nb_verlag
-                        FROM `tb_notenblatt` 
-                        LEFT JOIN tb_katigorie 
+                        FROM `noa_notenblatt` 
+                        LEFT JOIN noa_katigorie 
                         ON nb_katigorie = ka_id 
-                        LEFT JOIN tb_verlag 
+                        LEFT JOIN noa_verlag 
                         ON ve_id = nb_verlag 
-                        LEFT JOIN tb_besetzung 
+                        LEFT JOIN noa_besetzung 
                         ON be_id = nb_besetzung";
                     
                     if(isset($_GET['search'])) {
@@ -303,10 +192,10 @@
                                 $sql .= " AND (nb_katigorie = " . $kategorie . ")";
                             }
                             if($z_i_kirchenjahr != "nd"){
-                                $sql .= " AND (nb_id in ( SELECT z.nb_zik_notenblatt FROM tb_nb_zik AS z WHERE z.nb_zik_z_i_kirchenjahr = " . $z_i_kirchenjahr . "))";
+                                $sql .= " AND (nb_id in ( SELECT z.nb_zik_notenblatt FROM noa_nb_zik AS z WHERE z.nb_zik_z_i_kirchenjahr = " . $z_i_kirchenjahr . "))";
                             }
                             if($thema != "nd"){
-                                $sql .= " AND (nb_id in ( SELECT th.nb_th_notenblatt FROM tb_nb_th AS th WHERE th.nb_th_thema = " . $thema . "))";
+                                $sql .= " AND (nb_id in ( SELECT th.nb_th_notenblatt FROM noa_nb_th AS th WHERE th.nb_th_thema = " . $thema . "))";
                             }
                         }
                     }
@@ -319,11 +208,11 @@
                     if ($result->num_rows > 0) {
                         //Jede Reie der Datenbank anzeigen
                         while($row = $result->fetch_assoc()) {
-                            if($row["nb_status"] == "akti"){
+                            if($row["nb_status"] == "akti" || $row["nb_status"] == "arch"){
                                 
                                 $sqlI = "SELECT z.zik_name 
-                                    FROM tb_nb_zik AS nz 
-                                    JOIN tb_z_i_kirchenjahr AS z 
+                                    FROM noa_nb_zik AS nz 
+                                    JOIN noa_z_i_kirchenjahr AS z 
                                     ON nz.nb_zik_z_i_kirchenjahr = z.zik_id 
                                     WHERE nz.nb_zik_notenblatt = " . $row["nb_id"];
                                 $resultI = $conn->query($sqlI);
@@ -335,8 +224,8 @@
                                 }
                                 
                                 $sqlI = "SELECT t.th_name
-                                    FROM tb_nb_th AS nt 
-                                    JOIN tb_thema AS t 
+                                    FROM noa_nb_th AS nt 
+                                    JOIN noa_thema AS t 
                                     ON nt.nb_th_thema = t.th_id
                                     WHERE nt.nb_th_notenblatt = " . $row["nb_id"];
                                 $resultI = $conn->query($sqlI);
@@ -356,13 +245,29 @@
                                 <td>" . $row["be_name"]. "</td>
                                 <td>" . $the . "</td>
                                 <td>" . $zik . "</td>
-                                <td onclick=\"document.getElementById('editBlock').style.display = 'block'; document.getElementById('editID').setAttribute('value','".$row["nb_id"]."'); document.getElementById('editNummer').setAttribute('value','".$row["nb_katalognummer"]."'); document.getElementById('editTitel').setAttribute('value','".$row["nb_titel"]."'); document.getElementById('editUntertitel').setAttribute('value','".$row["nb_untertitel"]."'); document.getElementById('editZugehoerigkeit').setAttribute('value','".$row["nb_zugehoerigkeit"]."'); document.getElementById('editKomponist').setAttribute('value','".$row["nb_komponist"]."'); document.getElementById('editBearbeitung').setAttribute('value','".$row["nb_bearbeitung"]."'); document.getElementById('editTexter').setAttribute('value','".$row["nb_texter"]."'); document.getElementById('editWerknummer').setAttribute('value','".$row["nb_werknummer"]."'); document.querySelector('#editKategorie').value = ".$row["nb_katigorie"]."; document.querySelector('#editBesetzung').value = ".$row["nb_besetzung"]."; document.querySelector('#editStatus').value = ".$row["nb_status"]."; document.querySelector('#editVerlag').value = ";  
+                                <td onclick=\"document.getElementById('editBlock').style.display = 'block'; 
+                                document.getElementById('editID').setAttribute('value','".$row["nb_id"]."'); 
+                                document.getElementById('editNummer').setAttribute('value','".$row["nb_katalognummer"]."'); 
+                                document.getElementById('editTitel').setAttribute('value','".$row["nb_titel"]."'); 
+                                document.getElementById('editUntertitel').setAttribute('value','".$row["nb_untertitel"]."'); 
+                                document.getElementById('editZugehoerigkeit').setAttribute('value','".$row["nb_zugehoerigkeit"]."'); 
+                                document.getElementById('editKomponist').setAttribute('value','".$row["nb_komponist"]."'); 
+                                document.getElementById('editBearbeitung').setAttribute('value','".$row["nb_bearbeitung"]."'); 
+                                document.getElementById('editTexter').setAttribute('value','".$row["nb_texter"]."'); 
+                                document.getElementById('editWerknummer').setAttribute('value','".$row["nb_werknummer"]."'); 
+                                document.querySelector('#editKategorie').value = ".$row["nb_katigorie"]."; 
+                                document.querySelector('#editBesetzung').value = ".$row["nb_besetzung"]."; 
+                                document.querySelector('#editVerlag').value = '";
                                 if($row["nb_verlag"] == ""){
                                     echo "nd";
                                 } else{
                                     echo $row["nb_verlag"];
                                 }
-                                echo ";\"><img src='img/edit.svg'></td>
+                                echo "';
+                                document.querySelector('#editStatus').value = '".$row["nb_status"]."';  
+                                
+                                \">
+                                <img src='img/edit.svg'></td>
                                 <td onclick=\"document.getElementById('more".$row["nb_id"]."').style.display = 'table-row';\"><img src='img/info.svg'></td>
                                 </tr>
                                 <tr style='display: none' id='more".$row["nb_id"]."'>
@@ -388,14 +293,14 @@
         <!-- Bearbeiten -->
         <div id="editBlock" class="editNewBG" style='display: none'>
             <div class="editNewForm">
-                <form method="post" action="?edit=1">
+                <form method="post" action="function/notenblattEdit.php?edit=1">
                     
                     <input id="editID" type="hidden" name="ID">
                     
                     <div class="formLable">Kategorie</div>
                     <select id="editKategorie" class="formSelect" name="kategorie">
                     <?php
-                        $sql = "SELECT * FROM tb_katigorie ORDER BY `ka_name`";
+                        $sql = "SELECT * FROM noa_katigorie ORDER BY `ka_name`";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -420,11 +325,11 @@
 
                     <div class="formLable">Zugehörigkeit</div>
                     <input id="editZugehoerigkeit" class="formInput" type="text" name="zugehoerigkeit">
-<!--
+            <!--
                     <div class="formLable">Zeit im Kirchenjahr</div>
                     <select class="formSelect" name="z_i_kirchenjahr[]" multiple>
                     <?php
-                        $sql = "SELECT * FROM tb_z_i_kirchenjahr";
+                        $sql = "SELECT * FROM noa_z_i_kirchenjahr";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -441,7 +346,7 @@
                     <div class="formLable">Thema</div>
                     <select class="formSelect" name="thema[]" multiple>
                     <?php
-                        $sql = "SELECT * FROM tb_thema";
+                        $sql = "SELECT * FROM noa_thema";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -454,11 +359,11 @@
                         }
                     ?>
                     </select>
--->
+            -->
                     <div class="formLable">Besetzung</div>
                     <select id="editBesetzung" class="formSelect" name="besetzung">
                     <?php
-                        $sql = "SELECT * FROM tb_besetzung";
+                        $sql = "SELECT * FROM noa_besetzung";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -485,7 +390,7 @@
                     <select id="editVerlag" class="formSelect" name="verlag">
                         <option value='nd'></option>
                     <?php
-                        $sql = "SELECT * FROM tb_verlag";
+                        $sql = "SELECT * FROM noa_verlag";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -520,12 +425,12 @@
         <!-- Neu -->
         <div id="newBlock" class="editNewBG" style='display: none'>
             <div class="editNewForm">
-                <form class="formForm" action="?add=1" method="post">
+                <form class="formForm" action="function/notenblattAdd.php?add=1" method="post">
 
                 <div class="formLable">Kategorie</div>
                 <select class="formSelect" name="kategorie">
                 <?php
-                    $sql = "SELECT * FROM tb_katigorie ORDER BY `ka_name`";
+                    $sql = "SELECT * FROM noa_katigorie ORDER BY `ka_name`";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
@@ -554,7 +459,7 @@
                 <div class="formLable">Zeit im Kirchenjahr</div>
                 <select class="formSelect" name="z_i_kirchenjahr[]" multiple>
                 <?php
-                    $sql = "SELECT * FROM tb_z_i_kirchenjahr";
+                    $sql = "SELECT * FROM noa_z_i_kirchenjahr";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
@@ -571,7 +476,7 @@
                 <div class="formLable">Thema</div>
                 <select class="formSelect" name="thema[]" multiple>
                 <?php
-                    $sql = "SELECT * FROM tb_thema";
+                    $sql = "SELECT * FROM noa_thema";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
@@ -588,7 +493,7 @@
                 <div class="formLable">Besetzung</div>
                 <select class="formSelect" name="besetzung">
                 <?php
-                    $sql = "SELECT * FROM tb_besetzung";
+                    $sql = "SELECT * FROM noa_besetzung";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
@@ -615,7 +520,7 @@
                 <select class="formSelect" name="verlag">
                     <option value='nd'></option>
                 <?php
-                    $sql = "SELECT * FROM tb_verlag";
+                    $sql = "SELECT * FROM noa_verlag";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
@@ -633,7 +538,7 @@
                 <input class="formInput" type="text" name="werknummer">
 
                 <div class="formLable">Status</div>
-                <select class="formSelect" name="status">
+                <select class="formSelect" id="addStatus" name="status">
                     <option value='akti'>Aktiv</option>
                     <option value='arch'>Archiviert</option>
                     <option value='verl'>Verliehen</option>
