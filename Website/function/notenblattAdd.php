@@ -58,7 +58,7 @@
             }
 
             if($thema != 'nd'){
-                foreach($thema  as $value){
+                foreach($thema as $value){
                     $sql = "INSERT INTO `noa_nb_th`(`nb_th_thema`, `nb_th_notenblatt`) VALUES ($value,$id)";
                     if ($conn->query($sql) === TRUE) {
 
@@ -69,7 +69,7 @@
             }
 
             if($z_i_kirchenjahr != 'nd'){
-                foreach($z_i_kirchenjahr  as $value){
+                foreach($z_i_kirchenjahr as $value){
                     $sql = "INSERT INTO `noa_nb_zik`(`nb_zik_z_i_kirchenjahr`, `nb_zik_notenblatt`) VALUES ($value,$id)";
                     if ($conn->query($sql) === TRUE) {
 

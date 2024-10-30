@@ -21,6 +21,46 @@
         <link rel="stylesheet" href="style/searchSite.css">
     </head> 
     <body>
+
+        <script>
+
+            function SetEdit(id, katalognummer, titel, untertitel,zugehoerigkeit, komponist, bearbeitung, texter, werknummer, katigorie, besetzung, zeitImKirchenjahr, thema, verlag, status) {
+                document.getElementById('editBlock').style.display = 'block'; 
+                document.getElementById('editID').setAttribute('value', id); 
+                document.getElementById('editNummer').setAttribute('value', katalognummer); 
+                document.getElementById('editTitel').setAttribute('value', titel); 
+                document.getElementById('editUntertitel').setAttribute('value', untertitel); 
+                document.getElementById('editZugehoerigkeit').setAttribute('value', zugehoerigkeit); 
+                document.getElementById('editKomponist').setAttribute('value', komponist); 
+                document.getElementById('editBearbeitung').setAttribute('value', bearbeitung); 
+                document.getElementById('editTexter').setAttribute('value', texter); 
+                document.getElementById('editWerknummer').setAttribute('value', werknummer); 
+                document.querySelector('#editKategorie').value = katigorie; 
+                document.querySelector('#editBesetzung').value = besetzung; 
+
+                SetEditZik(zeitImKirchenjahr);
+                SetEditThema(thema);
+
+                document.querySelector('#editVerlag').value = verlag;
+                document.querySelector('#editStatus').value = status;  
+
+            }
+
+            function SetEditZik(values) { 
+                var element = document.getElementById('editZik');
+                for (var i = 0; i < element.options.length; i++) {
+                    element.options[i].selected = values.indexOf(element.options[i].value) >= 0;
+                }
+            }
+
+            function SetEditThema(values) { 
+                var element = document.getElementById('editThema');
+                for (var i = 0; i < element.options.length; i++) {
+                    element.options[i].selected = values.indexOf(element.options[i].value) >= 0;
+                }
+            }
+        </script>
+
         <div class="container">
             
             <ul class="nav">
@@ -142,11 +182,7 @@
                     
                     <img src="img/add.svg" class="icon" onclick="document.getElementById('newBlock').style.display = 'block';">
                 </div>
-                
-               
-                
-                
-                
+
                 <table class="tableOutput">
                     <tr>
                         <th></th>
@@ -160,7 +196,6 @@
                         <th></th>
                         <th></th>
                     </tr>
-
                     <?php 
                     $sql = "SELECT `nb_id`, `nb_katalognummer`, `nb_titel`, `nb_untertitel`, `nb_katigorie`,`nb_besetzung`, `nb_komponist`, `nb_bearbeitung`, `nb_texter`, `nb_werknummer`, `nb_status`, `nb_zugehoerigkeit`, ka_name, ka_prefix, ve_name, be_name, nb_verlag
                         FROM `noa_notenblatt` 
@@ -210,74 +245,71 @@
                         while($row = $result->fetch_assoc()) {
                             if($row["nb_status"] == "akti" || $row["nb_status"] == "arch"){
                                 
-                                $sqlI = "SELECT z.zik_name 
+                                $sqlZik = "SELECT z.zik_name, z.zik_id 
                                     FROM noa_nb_zik AS nz 
                                     JOIN noa_z_i_kirchenjahr AS z 
                                     ON nz.nb_zik_z_i_kirchenjahr = z.zik_id 
                                     WHERE nz.nb_zik_notenblatt = " . $row["nb_id"];
-                                $resultI = $conn->query($sqlI);
+                                $resultZik = $conn->query($sqlZik);
                                 $zik = "";
+                                $zikSel = "[";
                                 if ($result->num_rows > 0) {
-                                    while($rowI = $resultI->fetch_assoc()) {
-                                    $zik .= $rowI["zik_name"] . " ";
+                                    $i = 0;
+                                    while($rowZik = $resultZik->fetch_assoc()) {
+                                    $zik .= $rowZik["zik_name"] . " ";
+                                    $zikSel .= "'" . $rowZik["zik_id"] . "',";
                                     }
+                                    $zikSel .= "]";
                                 }
                                 
-                                $sqlI = "SELECT t.th_name
+                                $sqlTh = "SELECT t.th_name, t.th_id 
                                     FROM noa_nb_th AS nt 
                                     JOIN noa_thema AS t 
                                     ON nt.nb_th_thema = t.th_id
                                     WHERE nt.nb_th_notenblatt = " . $row["nb_id"];
-                                $resultI = $conn->query($sqlI);
+                                $resultTh = $conn->query($sqlTh);
                                 $the = "";
+                                $theSel = "[";
                                 if ($result->num_rows > 0) {
-                                    while($rowI = $resultI->fetch_assoc()) {
-                                    $the .= $rowI["th_name"] . " ";
+                                    $i = 0;
+                                    while($rowTh = $resultTh->fetch_assoc()) {
+                                    $the .= $rowTh["th_name"] . " ";
+                                    $theSel .= "'" .$rowTh["th_id"]. "',";
                                     }
+                                    $theSel .= "]";
+                                }
+
+                                if($row["nb_verlag"] == ""){
+                                    $verlag = "nd";
+                                } else{
+                                    $verlag = $row["nb_verlag"];
                                 }
                                 
                                 echo "<tr>
-                                <td>" . $row["ka_prefix"] . $row["nb_katalognummer"]. "</td>
-                                <td>" . $row["nb_titel"]. "</td>
-                                <td>" . $row["nb_untertitel"]. "</td>
-                                <td>" . $row["nb_zugehoerigkeit"]. "</td>
-                                <td>" . $row["ka_name"]. "</td>
-                                <td>" . $row["be_name"]. "</td>
-                                <td>" . $the . "</td>
-                                <td>" . $zik . "</td>
-                                <td onclick=\"document.getElementById('editBlock').style.display = 'block'; 
-                                document.getElementById('editID').setAttribute('value','".$row["nb_id"]."'); 
-                                document.getElementById('editNummer').setAttribute('value','".$row["nb_katalognummer"]."'); 
-                                document.getElementById('editTitel').setAttribute('value','".$row["nb_titel"]."'); 
-                                document.getElementById('editUntertitel').setAttribute('value','".$row["nb_untertitel"]."'); 
-                                document.getElementById('editZugehoerigkeit').setAttribute('value','".$row["nb_zugehoerigkeit"]."'); 
-                                document.getElementById('editKomponist').setAttribute('value','".$row["nb_komponist"]."'); 
-                                document.getElementById('editBearbeitung').setAttribute('value','".$row["nb_bearbeitung"]."'); 
-                                document.getElementById('editTexter').setAttribute('value','".$row["nb_texter"]."'); 
-                                document.getElementById('editWerknummer').setAttribute('value','".$row["nb_werknummer"]."'); 
-                                document.querySelector('#editKategorie').value = ".$row["nb_katigorie"]."; 
-                                document.querySelector('#editBesetzung').value = ".$row["nb_besetzung"]."; 
-                                document.querySelector('#editVerlag').value = '";
-                                if($row["nb_verlag"] == ""){
-                                    echo "nd";
-                                } else{
-                                    echo $row["nb_verlag"];
-                                }
-                                echo "';
-                                document.querySelector('#editStatus').value = '".$row["nb_status"]."';  
-                                
-                                \">
-                                <img src='img/edit.svg'></td>
-                                <td onclick=\"document.getElementById('more".$row["nb_id"]."').style.display = 'table-row';\"><img src='img/info.svg'></td>
+                                    <td>" . $row["ka_prefix"] . $row["nb_katalognummer"]. "</td>
+                                    <td>" . $row["nb_titel"]. "</td>
+                                    <td>" . $row["nb_untertitel"]. "</td>
+                                    <td>" . $row["nb_zugehoerigkeit"]. "</td>
+                                    <td>" . $row["ka_name"]. "</td>
+                                    <td>" . $row["be_name"]. "</td>
+                                    <td>" . $the . "</td>
+                                    <td>" . $zik . "</td>
+                                    <td onclick=\"SetEdit('".$row["nb_id"]."', '".$row["nb_katalognummer"]."', '".$row["nb_titel"]."', '".$row["nb_untertitel"]."', '".$row["nb_zugehoerigkeit"]."', '".$row["nb_komponist"]."', '".$row["nb_bearbeitung"]."', '".$row["nb_texter"]."', '".$row["nb_werknummer"]."', ".$row["nb_katigorie"].", ".$row["nb_besetzung"].", ".$zikSel.", ".$theSel.", '".$verlag."', '".$row["nb_status"]."');\">
+                                        <img src='img/edit.svg'>
+                                    </td>
+                                    <td onclick=\"document.getElementById('more".$row["nb_id"]."').style.display = 'table-row';\">
+                                        <img src='img/info.svg'>
+                                    </td>
                                 </tr>
                                 <tr style='display: none' id='more".$row["nb_id"]."'>
-                                <td colspan='9'> <div>Komponist: " . $row["nb_komponist"]. "</div>
-                                    <div>Bearbeitung: " . $row["nb_bearbeitung"]. "</div>
-                                    <div>Texter: " . $row["nb_texter"]. "</div>
-                                    <div>Verlag: " . $row["ve_name"]. "</div>
-                                    <div>Werknummer: " . $row["nb_werknummer"]. "</div></td>
-                                    <td onclick=\"document.getElementById('more".$row["nb_id"]."').style.display = 'none';\">
-                                    <img src='img/cancel.svg'></td>
+                                    <td colspan='9'> <div>Komponist: " . $row["nb_komponist"]. "</div>
+                                        <div>Bearbeitung: " . $row["nb_bearbeitung"]. "</div>
+                                        <div>Texter: " . $row["nb_texter"]. "</div>
+                                        <div>Verlag: " . $row["ve_name"]. "</div>
+                                        <div>Werknummer: " . $row["nb_werknummer"]. "</div></td>
+                                        <td onclick=\"document.getElementById('more".$row["nb_id"]."').style.display = 'none';\">
+                                            <img src='img/cancel.svg'>
+                                        </td>
                                 </tr>";
                             }
                         }
@@ -325,9 +357,9 @@
 
                     <div class="formLable">Zugehörigkeit</div>
                     <input id="editZugehoerigkeit" class="formInput" type="text" name="zugehoerigkeit">
-            <!--
+
                     <div class="formLable">Zeit im Kirchenjahr</div>
-                    <select class="formSelect" name="z_i_kirchenjahr[]" multiple>
+                    <select id="editZik" class="formSelect" name="z_i_kirchenjahr[]" multiple>
                     <?php
                         $sql = "SELECT * FROM noa_z_i_kirchenjahr";
                         $result = $conn->query($sql);
@@ -344,7 +376,7 @@
                     </select>
 
                     <div class="formLable">Thema</div>
-                    <select class="formSelect" name="thema[]" multiple>
+                    <select id="editThema" class="formSelect" name="thema[]" multiple>
                     <?php
                         $sql = "SELECT * FROM noa_thema";
                         $result = $conn->query($sql);
@@ -359,7 +391,7 @@
                         }
                     ?>
                     </select>
-            -->
+
                     <div class="formLable">Besetzung</div>
                     <select id="editBesetzung" class="formSelect" name="besetzung">
                     <?php
