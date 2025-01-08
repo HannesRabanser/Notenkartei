@@ -6,7 +6,7 @@
     background-color: white;
 }
 
-.tableOutput tr:nth-child(4n-2), tr:nth-child(4n-1){
+.tableOutput tr:nth-child(4n-2), .tableOutput tr:nth-child(4n-1){
     background-color: #f2f2f2;
 }
 
@@ -28,13 +28,9 @@
     height: 25px;
 }
 
-.tableOutput td:nth-last-child(2), td:nth-last-child(1) {
+.tableOutput td:nth-last-child(2), .tableOutput td:nth-last-child(1) {
     width: 0px;
     padding: 5px;
-}
-
-.tableOutput div{
-    
 }
 
 .icon{
@@ -75,14 +71,17 @@
     width: 400px;
 }
 
-.formHead{
-    
-}
-
 .formLable{
     width: 100px;
     float: left;
     margin: 5px 0px;
+}
+
+.formLableNew{
+    width: 85px;
+    float: left;
+    margin: 5px 0px;
+    padding: 0px 0px 0px 15px;
 }
 
 .formInput{
@@ -95,12 +94,4 @@
     width: calc(100% - 112px);
     float: left;    
     margin: 5px 0px;
-}
-
-.formSubmit{
-    
-}
-
-.formReset{
-    
 }

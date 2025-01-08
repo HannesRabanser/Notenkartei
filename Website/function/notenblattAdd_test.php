@@ -230,5 +230,5 @@
         $conn->close();
     }
 
-    header('Location: ../home.php');
+    header('Location: ../home_test.php');
 ?>

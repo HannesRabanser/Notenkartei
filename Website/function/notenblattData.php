@@ -38,12 +38,11 @@
         $sql .= " AND (nb_id in ( SELECT th.nb_th_notenblatt FROM noa_nb_th AS th WHERE th.nb_th_thema = " . $thema . "))";
     }
    
-                    
+    
     $sql .= " ORDER BY nb_katigorie, nb_katalognummer";
-                    
+    
                     
     $result = $conn->query($sql);
-
 
     echo "<table class='tableOutput' >";
     echo "<tr>
@@ -51,7 +50,7 @@
         <th>Titel</th>
         <th>Untertitel</th>
         <th>Zugehoerigkeit</th>
-        <th>Katigorie</th>
+        <th>Komponist</th>
         <th>Besetzung</th>
         <th>Thema</th>
         <th>Zeit im Kirchenjahr</th>
@@ -106,11 +105,11 @@
                                 
             echo "<tr>
                 <td>" . $row["ka_prefix"] . $row["nb_katalognummer"]. "</td>
-                <td>" . $row["nb_titel"]. "</td>
-                    <td>" . $row["nb_untertitel"]. "</td>
-                    <td>" . $row["nb_zugehoerigkeit"]. "</td>
-                    <td>" . $row["ka_name"]. "</td>
-                    <td>" . $row["be_name"]. "</td>
+                <td>" . $row["nb_titel"] . "</td>
+                    <td>" . $row["nb_untertitel"] . "</td>
+                    <td>" . $row["nb_zugehoerigkeit"] . "</td>
+                    <td>" . $row["nb_komponist"] . "</td>
+                    <td>" . $row["be_name"] . "</td>
                     <td>" . $the . "</td>
                     <td>" . $zik . "</td>
                     <td onclick=\"SetEdit('".$row["nb_id"]."', '".$row["nb_katalognummer"]."', '".$row["nb_titel"]."', '".$row["nb_untertitel"]."', '".$row["nb_zugehoerigkeit"]."', '".$row["nb_komponist"]."', '".$row["nb_bearbeitung"]."', '".$row["nb_texter"]."', '".$row["nb_werknummer"]."', ".$row["nb_katigorie"].", ".$row["nb_besetzung"].", ".$zikSel.", ".$theSel.", '".$verlag."', '".$row["nb_status"]."');\">
@@ -121,11 +120,13 @@
                     </td>
                 </tr>
                 <tr style='display: none' id='more".$row["nb_id"]."'>
-                    <td colspan='9'> <div>Komponist: " . $row["nb_komponist"]. "</div>
-                        <div>Bearbeitung: " . $row["nb_bearbeitung"]. "</div>
-                        <div>Texter: " . $row["nb_texter"]. "</div>
-                        <div>Verlag: " . $row["ve_name"]. "</div>
-                        <div>Werknummer: " . $row["nb_werknummer"]. "</div>
+                    <td colspan='9'> 
+                        <div>Katigorie: " . $row["ka_name"] . "</div>
+                        <!-- <div>Komponist: " . $row["nb_komponist"] . "</div> -->
+                        <div>Bearbeitung: " . $row["nb_bearbeitung"] . "</div>
+                        <div>Texter: " . $row["nb_texter"] . "</div>
+                        <div>Verlag: " . $row["ve_name"] . "</div>
+                        <div>Werknummer: " . $row["nb_werknummer"] . "</div>
                     </td>
                     <td onclick=\"HideMore('more".$row["nb_id"]."');\">
                         <img src='img/cancel.svg'>
