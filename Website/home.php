@@ -255,7 +255,7 @@
         <!-- Bearbeiten -->
         <div id="editBlock" class="editNewBG" style='display: none'>
             <div class="editNewForm">
-                <form class="formForm" method="post" action="function/notenblattEdit.php?edit=1">
+                <form class="formForm" method="post" action="function/notenblattEdit.php?edit=1" onreset="Hide('editBlock');">
                     
                     <input id="editID" type="hidden" name="ID">
                     
@@ -391,7 +391,7 @@
                             <select id="editVerlag" class="formSelect" name="verlag">
                                 <option value='nd'></option>
                             <?php
-                                $sql = "SELECT * FROM noa_verlag";
+                                $sql = "SELECT * FROM noa_verlag ORDER BY ve_name ASC";
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
@@ -428,7 +428,7 @@
                         
                         <tr><td>
                             <button class="formSubmit" type="submit">Bearbeiten</button>
-                            <button class="formReset" type="reset" onclick="document.getElementById('editBlock').style.display = 'none';">Abbrechen</button>
+                            <button class="formReset" type="reset">Abbrechen</button>
                         </td></tr>
                     </table>
                 </form>
@@ -571,7 +571,7 @@
                             <select class="formSelect" name="verlag">
                                 <option value='nd'></option>
                             <?php
-                                $sql = "SELECT * FROM noa_verlag";
+                                $sql = "SELECT * FROM noa_verlag ORDER BY ve_name ASC";
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {

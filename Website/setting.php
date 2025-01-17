@@ -249,7 +249,7 @@
                         </tr>
 
                         <?php 
-                        $sql = "SELECT * FROM noa_verlag";
+                        $sql = "SELECT * FROM noa_verlag ORDER BY ve_name ASC";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {

@@ -255,7 +255,7 @@
         <!-- Bearbeiten -->
         <div id="editBlock" class="editNewBG" style='display: none'>
             <div class="editNewForm">
-                <form class="formForm" method="post" action="function/notenblattEdit.php?edit=1">
+                <form class="formForm" method="post" action="function/notenblattEdit_test.php?edit=1">
                     
                     <input id="editID" type="hidden" name="ID">
                     
@@ -438,7 +438,7 @@
         <!-- Neu -->
         <div id="newBlock" class="editNewBG" style='display: none'>
             <div class="editNewForm">
-                <form class="formForm" action="function/notenblattAdd.php?add=1" method="post" onreset="HideNew();">
+                <form class="formForm" action="function/notenblattAdd_test.php?add=1" method="post" onreset="HideNew();">
                     <table style='width: 100%;'>
                         <tr><td>
                             <div class="formLable">Kategorie</div>
