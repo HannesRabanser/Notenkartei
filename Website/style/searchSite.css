@@ -20,6 +20,11 @@
     padding: 8px;
 }
 
+.tableOutput tr > th {
+    position: sticky;
+    top: 34px;
+}
+
 .tableOutput td{
     padding: 6px;
 }
@@ -36,13 +41,28 @@
 .icon{
     height: 25px; 
     float: right;
+}
+
+.searchBlock{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color: white;    
+    height: 25px;
     padding: 5px;
 }
 
-.searchBar{
+.searchBlock form{
     float: left;
     vertical-align: middle;
+    height: 21px;
+    padding: 2px 0px;
 }
+
+.searchBlock form input{
+    vertical-align: middle;
+}
+
 
 .editNewBG{
     position: fixed;

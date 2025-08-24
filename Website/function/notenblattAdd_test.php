@@ -229,6 +229,4 @@
         }
         $conn->close();
     }
-
-    header('Location: ../home_test.php');
 ?>

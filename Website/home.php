@@ -26,6 +26,13 @@
 
             window.onload = UpdateData;
 
+            function GetNewXMLHttpRequest(){                
+                if(window.ActiveXObject){
+                    return new ActiveXObject("Microsoft.XMLHTTP")
+                }
+                return new XMLHttpRequest();
+            }
+
             function SetEdit(id, katalognummer, titel, untertitel,zugehoerigkeit, komponist, bearbeitung, texter, werknummer, katigorie, besetzung, zeitImKirchenjahr, thema, verlag, status) {
                 document.getElementById('editBlock').style.display = 'block'; 
                 document.getElementById('editID').setAttribute('value', id); 
@@ -69,15 +76,15 @@
                 var thema = document.querySelector('#searchThema').value;
                 var besetzung = document.querySelector('#searchBesetzung').value;
 
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function() {
+                var xmlhttpUpdate = GetNewXMLHttpRequest();
+                xmlhttpUpdate.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         document.getElementById("tableData").innerHTML = this.responseText;
                     }
                 };
 
-                xmlhttp.open("GET","function/notenblattData.php?searchBar="+searchBar+"&kategorie="+kategorie+"&z_i_kirchenjahr="+z_i_kirchenjahr+"&thema="+thema+"&besetzung="+besetzung,true);
-                xmlhttp.send();
+                xmlhttpUpdate.open("GET","function/notenblattData.php?searchBar="+searchBar+"&kategorie="+kategorie+"&z_i_kirchenjahr="+z_i_kirchenjahr+"&thema="+thema+"&besetzung="+besetzung,true);
+                xmlhttpUpdate.send();
             }
 
             function ClearData()
@@ -90,6 +97,53 @@
 
                 UpdateData();
             }
+
+            function submitAdd() {
+                var  xmlhttpAdd;
+                xmlhttpAdd = GetNewXMLHttpRequest();
+
+                // Instantiating the request object
+                xmlhttpAdd.open("POST", "function/notenblattAdd.php?add=1", true);
+                // Defining event listener for readystatechange event
+                xmlhttpAdd.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200)
+                    {                        
+                        UpdateData()
+                        console.log(this.responseText);
+                    }
+                }
+
+                // Retrieving the form data
+                var addForm = document.getElementById("addForm");
+                var formData = new FormData(addForm);
+
+                // Sending the request to the server
+                xmlhttpAdd.send(formData);
+            }
+
+            function submitEdit() {
+                var  xmlhttpEdit;
+                xmlhttpEdit = GetNewXMLHttpRequest();
+
+                // Instantiating the request object
+                xmlhttpEdit.open("POST", "function/notenblattEdit.php?edit=1", true);
+                // Defining event listener for readystatechange event
+                xmlhttpEdit.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200)
+                    {                        
+                        UpdateData()
+                        console.log(this.responseText);
+                    }
+                }
+
+                // Retrieving the form data
+                var editForm = document.getElementById("editForm");
+                var formData = new FormData(editForm);
+
+                // Sending the request to the server
+                xmlhttpEdit.send(formData);
+            }
+
 
             function ShowMore(elementName)
             {
@@ -151,9 +205,9 @@
             
             <div class="settingsBlock" style="clear: Both">
                 
-                <div class="">
+                <div class="searchBlock">
                     <form class="searchBar">
-                        <input type="test" name="searchBar" id="searchSearch" placeholder="Suche" onkeyup="UpdateData()" onmouseup="UpdateData()">
+                        <input type="text" name="searchBar" id="searchSearch" placeholder="Suche" onkeyup="UpdateData()" onmouseup="UpdateData()">
                         
                         <select class="" name="kategorie" id="searchKategorie" onchange="UpdateData()">
                             <option value='nd' >Kategorie</option>
@@ -164,10 +218,6 @@
                                 //Jede Reie der Datenbank anzeigen
                                 while($row = $result->fetch_assoc()) {
                                     echo "<option value='".$row["ka_id"]."'"; 
-                                    if(isset($_POST['kategorie'])){
-                                        if($_POST['kategorie'] == $row["ka_id"])
-                                            {echo " selected";} 
-                                    }
                                     echo ">".$row["ka_name"]."</option>";
                                 }
                             } else {
@@ -185,10 +235,6 @@
                                 //Jede Reie der Datenbank anzeigen
                                 while($row = $result->fetch_assoc()) {
                                     echo "<option value='".$row["zik_id"]."'"; 
-                                    if(isset($_POST['z_i_kirchenjahr'])){
-                                        if($_POST['z_i_kirchenjahr'] == $row["zik_id"])
-                                            {echo " selected";} 
-                                    }
                                     echo ">".$row["zik_name"]."</option>";
                                 }
                             } else {
@@ -206,10 +252,6 @@
                                 //Jede Reie der Datenbank anzeigen
                                 while($row = $result->fetch_assoc()) {
                                     echo "<option value='".$row["th_id"]."'"; 
-                                    if(isset($_POST['thema'])){
-                                        if($_POST['thema'] == $row["th_id"])
-                                            {echo " selected";} 
-                                    }
                                     echo ">".$row["th_name"]."</option>";
                                 }
                             } else {
@@ -227,10 +269,6 @@
                                 //Jede Reie der Datenbank anzeigen
                                 while($row = $result->fetch_assoc()) {
                                     echo "<option value='".$row["be_id"]."'"; 
-                                    if(isset($_POST['besetzung'])){
-                                        if($_POST['besetzung'] == $row["be_id"])
-                                            {echo " selected";} 
-                                    }
                                     echo ">".$row["be_name"]."</option>";
                                 }
                             } else {
@@ -255,7 +293,7 @@
         <!-- Bearbeiten -->
         <div id="editBlock" class="editNewBG" style='display: none'>
             <div class="editNewForm">
-                <form class="formForm" method="post" action="function/notenblattEdit.php?edit=1" onreset="Hide('editBlock');">
+                <form class="formForm" id="editForm" onSubmit="submitEdit(); Hide('editBlock'); return false;" onreset="Hide('editBlock');" enctype="multipart/form-data" >
                     
                     <input id="editID" type="hidden" name="ID">
                     
@@ -438,7 +476,7 @@
         <!-- Neu -->
         <div id="newBlock" class="editNewBG" style='display: none'>
             <div class="editNewForm">
-                <form class="formForm" action="function/notenblattAdd.php?add=1" method="post" onreset="HideNew();">
+                <form class="formForm" id="addForm" onSubmit="submitAdd(); Hide('newBlock'); return false;" onreset="Hide('newBlock');" enctype="multipart/form-data">
                     <table style='width: 100%;'>
                         <tr><td>
                             <div class="formLable">Kategorie</div>

@@ -1,5 +1,6 @@
 <?php
-    if(isset($_GET['edit'])) {
+    if(isset($_GET['edit'])) 
+    {
         //Datenbankverbindung aufbauen
         include 'databaseCon.php';
 
@@ -187,17 +188,14 @@
             $sql = "UPDATE `noa_notenblatt` 
                     SET `nb_katalognummer`='$nb_katalognummer', `nb_titel`='$nb_titel', `nb_untertitel`='$nb_untertitel', `nb_zugehoerigkeit`='$nb_zugehoerigkeit', `nb_katigorie`=$nb_kategorie, `nb_besetzung`=$nb_besetzung, `nb_komponist`='$nb_komponist', `nb_bearbeitung`='$nb_bearbeitung', `nb_texter`='$nb_texter', `nb_verlag`= $nb_verlag, `nb_werknummer`='$nb_werknummer', `nb_status`='$nb_status' 
                     WHERE  nb_id = $nb_id ";
-            //echo "$sql <br/>";
 
             if ($conn->query($sql) === TRUE) 
             {                
                 $sql = "DELETE FROM noa_nb_th WHERE nb_th_notenblatt = $nb_id";
-                //echo "$sql <br/>";
 
                 if ($conn->query($sql) === TRUE) 
                 {
                     $sql = "DELETE FROM noa_nb_zik WHERE nb_zik_notenblatt = $nb_id ";
-                    //echo "$sql <br/>";
 
                     if ($conn->query($sql) === TRUE) 
                     {
@@ -206,7 +204,6 @@
                             if ($value != 'nd')
                             {
                                 $sql = "INSERT INTO `noa_nb_zik`(`nb_zik_z_i_kirchenjahr`, `nb_zik_notenblatt`) VALUES ($value,$nb_id) ";
-                                //echo "$sql <br/>";
                                 
                                 if ($conn->query($sql) === TRUE) {
                                     //echo "Record updated successfully";
@@ -220,7 +217,6 @@
                             if ($value != 'nd')
                             {
                                 $sql = "INSERT INTO `noa_nb_th`(`nb_th_thema`, `nb_th_notenblatt`) VALUES ($value,$nb_id) ";
-                                //echo "$sql <br/>";
 
                                 if ($conn->query($sql) === TRUE) {
                                     //echo "Record updated successfully";
@@ -247,11 +243,4 @@
         }
         $conn->close();
     }
-    
-    header('Location: ../home_test.php');
 ?>
-
-<br/>
-<br/>
-<br/>
-<a href="../home.php"> Home </a>
